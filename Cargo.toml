@@ -1,0 +1,61 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/slack-code",
+    "crates/slack-code-daemon",
+    "crates/slack-code-tui",
+    "crates/slack-code-hook",
+    "crates/slack-code-common",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/tonyjom/slack-code"
+
+[workspace.dependencies]
+# Async runtime
+tokio = { version = "1.43", features = ["full"] }
+
+# Slack integration (hyper feature includes Socket Mode via WebSocket)
+slack-morphism = { version = "2.17", features = ["hyper"] }
+
+# TUI
+ratatui = "0.29"
+crossterm = "0.28"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.8"
+
+# CLI
+clap = { version = "4.5", features = ["derive", "env"] }
+
+# Error handling
+thiserror = "2.0"
+anyhow = "1.0"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# IPC
+interprocess = "2.2"
+
+# Utilities
+uuid = { version = "1.11", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+dirs = "6.0"
+regex = "1.11"
+
+# Daemon management
+daemonize = "0.5"
+nix = { version = "0.29", features = ["signal", "process"] }
+http = "1.1"
+
+# Internal crates
+slack-code-common = { path = "crates/slack-code-common" }
+slack-code-daemon = { path = "crates/slack-code-daemon" }
+slack-code-tui = { path = "crates/slack-code-tui" }

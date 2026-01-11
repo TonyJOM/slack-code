@@ -1,0 +1,22 @@
+[package]
+name = "slack-code"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "slack-code"
+path = "src/main.rs"
+
+[dependencies]
+slack-code-common = { workspace = true }
+slack-code-daemon = { workspace = true }
+slack-code-tui = { workspace = true }
+tokio = { workspace = true }
+clap = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+dirs = { workspace = true }

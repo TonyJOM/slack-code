@@ -1,0 +1,19 @@
+[package]
+name = "slack-code-tui"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+slack-code-common = { workspace = true }
+slack-code-daemon = { path = "../slack-code-daemon" }
+tokio = { workspace = true }
+ratatui = { workspace = true }
+crossterm = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+interprocess = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
