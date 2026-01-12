@@ -26,7 +26,6 @@ Download the latest release for your platform from [GitHub Releases](https://git
 | -------- | ------------- | ---------------------------------------------------- |
 | Linux    | x86_64        | `slack-code-vX.X.X-x86_64-unknown-linux-gnu.tar.gz`  |
 | Linux    | ARM64         | `slack-code-vX.X.X-aarch64-unknown-linux-gnu.tar.gz` |
-| macOS    | Intel         | `slack-code-vX.X.X-x86_64-apple-darwin.tar.gz`       |
 | macOS    | Apple Silicon | `slack-code-vX.X.X-aarch64-apple-darwin.tar.gz`      |
 
 Extract and copy both `slack-code` and `slack-code-hook` to a directory in your PATH.
