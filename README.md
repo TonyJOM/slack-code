@@ -12,33 +12,37 @@ A Rust CLI with interactive TUI for receiving Claude Code session notifications 
 
 ### Quick Install (Recommended)
 
-If you have Rust installed, run the install script:
-
 ```bash
-# From the cloned repo
-./scripts/install.sh
-
-# Or clone and install in one step (after repo is published)
-git clone https://github.com/tonyjom/slack-code && cd slack-code && ./scripts/install.sh
+curl -fsSL https://raw.githubusercontent.com/tonyjom/slack-code/main/scripts/install.sh | bash
 ```
 
-The script will:
-- Build release binaries
-- Install them to `~/.local/bin`
-- Guide you through PATH setup if needed
+This will automatically download the pre-built binary for your platform and install it to `~/.local/bin`.
 
-### Manual Installation
+### Download Binary Manually
+
+Download the latest release for your platform from [GitHub Releases](https://github.com/tonyjom/slack-code/releases):
+
+| Platform | Architecture  | Download                                             |
+| -------- | ------------- | ---------------------------------------------------- |
+| Linux    | x86_64        | `slack-code-vX.X.X-x86_64-unknown-linux-gnu.tar.gz`  |
+| Linux    | ARM64         | `slack-code-vX.X.X-aarch64-unknown-linux-gnu.tar.gz` |
+| macOS    | Intel         | `slack-code-vX.X.X-x86_64-apple-darwin.tar.gz`       |
+| macOS    | Apple Silicon | `slack-code-vX.X.X-aarch64-apple-darwin.tar.gz`      |
+
+Extract and copy both `slack-code` and `slack-code-hook` to a directory in your PATH.
+
+### Build from Source
+
+If you prefer to build from source (requires Rust):
 
 ```bash
+curl -fsSL https://raw.githubusercontent.com/tonyjom/slack-code/main/scripts/install.sh | bash -s -- --from-source
+
 git clone https://github.com/tonyjom/slack-code
 cd slack-code
 cargo install --path crates/slack-code
 cargo install --path crates/slack-code-hook
 ```
-
-### Pre-built Binaries
-
-Coming soon.
 
 ## Setup
 
@@ -107,26 +111,29 @@ slack-code daemon stop
 ## TUI Keyboard Shortcuts
 
 ### Global
-| Key | Action |
-|-----|--------|
+
+| Key | Action        |
+| --- | ------------- |
 | `1` | Sessions view |
-| `2` | Config view |
-| `3` | Logs view |
-| `?` | Toggle help |
-| `q` | Quit |
+| `2` | Config view   |
+| `3` | Logs view     |
+| `?` | Toggle help   |
+| `q` | Quit          |
 
 ### Navigation
-| Key | Action |
-|-----|--------|
-| `j` / `↓` | Next item |
+
+| Key       | Action        |
+| --------- | ------------- |
+| `j` / `↓` | Next item     |
 | `k` / `↑` | Previous item |
-| `Enter` | Select |
-| `Esc` | Cancel/Back |
+| `Enter`   | Select        |
+| `Esc`     | Cancel/Back   |
 
 ### Config View
-| Key | Action |
-|-----|--------|
-| `t` | Test tokens |
+
+| Key | Action       |
+| --- | ------------ |
+| `t` | Test tokens  |
 | `h` | Manage hooks |
 
 ## Configuration
@@ -148,6 +155,7 @@ hook_timeout = 5
 ### Environment Variables
 
 Tokens can also be set via environment variables:
+
 - `SLACK_CODE_BOT_TOKEN`
 
 ## Architecture
