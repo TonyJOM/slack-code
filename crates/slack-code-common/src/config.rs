@@ -228,7 +228,7 @@ pub fn install_hooks() -> Result<()> {
 
     // Add Notification hook
     hooks["Notification"] = serde_json::json!([{
-        "matcher": "permission_prompt|idle_prompt",
+        "matcher": "permission_prompt",
         "hooks": [{
             "type": "command",
             "command": HOOK_COMMAND,

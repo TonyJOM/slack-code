@@ -115,7 +115,7 @@ fn format_status_message(session: &Session) -> String {
                 slack_code_common::session::WaitReason::PermissionPrompt => {
                     "⏸️ Waiting for permission approval in terminal".to_string()
                 }
-                slack_code_common::session::WaitReason::IdlePrompt => {
+                slack_code_common::session::WaitReason::Stopped => {
                     "✅ Claude finished working! Waiting for your next input in terminal"
                         .to_string()
                 }

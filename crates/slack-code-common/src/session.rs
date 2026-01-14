@@ -121,7 +121,7 @@ impl SessionStatus {
             SessionStatus::Starting => "Starting",
             SessionStatus::Running => "Running",
             SessionStatus::WaitingForInput(WaitReason::PermissionPrompt) => "Needs Permission",
-            SessionStatus::WaitingForInput(WaitReason::IdlePrompt) => "Waiting",
+            SessionStatus::WaitingForInput(WaitReason::Stopped) => "Waiting",
             SessionStatus::WaitingForInput(WaitReason::PlanApproval) => "Plan Review",
             SessionStatus::Completed => "Completed",
             SessionStatus::Failed(_) => "Failed",
@@ -146,8 +146,8 @@ pub enum WaitReason {
     /// Permission dialog shown
     PermissionPrompt,
 
-    /// Idle/waiting for input (generic)
-    IdlePrompt,
+    /// Stopped and is waiting for next input
+    Stopped,
 
     /// Plan approval needed
     PlanApproval,
@@ -158,8 +158,7 @@ impl WaitReason {
     pub fn from_notification_type(s: &str) -> Self {
         match s {
             "permission_prompt" => WaitReason::PermissionPrompt,
-            "idle_prompt" => WaitReason::IdlePrompt,
-            _ => WaitReason::IdlePrompt,
+            _ => WaitReason::Stopped,
         }
     }
 }
