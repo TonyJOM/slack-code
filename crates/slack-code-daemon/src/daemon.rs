@@ -256,7 +256,7 @@ impl Daemon {
                     tracing::debug!("Received hook event: {:?}", hook_event);
 
                     let mut manager = session_manager.write().await;
-                    if let Some(mut session) = manager.handle_hook_event(hook_event) {
+                    if let Some((mut session, status_changed)) = manager.handle_hook_event(hook_event) {
                         // If session has no Slack thread, create one (for external sessions)
                         if session.slack_thread.is_none() {
                             if let Some(ref slack) = slack_service {
@@ -272,8 +272,8 @@ impl Daemon {
                                     }
                                 }
                             }
-                        } else {
-                            // Session already has thread, post status update
+                        } else if status_changed {
+                            // Only post status update, if status actually changed.
                             if let Some(ref slack) = slack_service {
                                 if let Some(ref thread) = session.slack_thread {
                                     let slack = slack.read().await;

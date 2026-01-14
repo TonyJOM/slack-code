@@ -38,7 +38,7 @@ impl SessionManager {
     }
 
     /// Handle a hook event from Claude Code
-    pub fn handle_hook_event(&mut self, event: HookEvent) -> Option<Session> {
+    pub fn handle_hook_event(&mut self, event: HookEvent) -> Option<(Session, bool)> {
         match event {
             HookEvent::SessionStart {
                 session_id,
@@ -51,8 +51,10 @@ impl SessionManager {
                 if let Some(&our_id) = self.claude_id_map.get(&session_id) {
                     // Session already exists, just update it
                     if let Some(session) = self.sessions.get_mut(&our_id) {
+                        let old_status = session.status.clone();
                         session.status = SessionStatus::Running;
-                        return Some(session.clone());
+                        let changed = old_status != session.status;
+                        return Some((session.clone(), changed));
                     }
                 }
 
@@ -69,15 +71,18 @@ impl SessionManager {
                 self.sessions.insert(id, session.clone());
                 self.claude_id_map.insert(session_id, id);
 
-                Some(session)
+                // New session always counts as "changed".
+                Some((session, true))
             }
 
             HookEvent::SessionEnd { session_id } => {
                 if let Some(&our_id) = self.claude_id_map.get(&session_id) {
                     if let Some(session) = self.sessions.get_mut(&our_id) {
+                        let old_status = session.status.clone();
                         session.status = SessionStatus::Completed;
                         session.ended_at = Some(Utc::now());
-                        return Some(session.clone());
+                        let changed = old_status != session.status;
+                        return Some((session.clone(), changed));
                     }
                 }
                 None
@@ -90,11 +95,13 @@ impl SessionManager {
             } => {
                 if let Some(&our_id) = self.claude_id_map.get(&session_id) {
                     if let Some(session) = self.sessions.get_mut(&our_id) {
+                        let old_status = session.status.clone();
+
                         // Determine wait reason from notification type
                         let wait_reason = notification_type
                             .as_deref()
                             .map(WaitReason::from_notification_type)
-                            .unwrap_or(WaitReason::IdlePrompt);
+                            .unwrap_or(WaitReason::Stopped);
 
                         // Check for plan approval in message
                         let wait_reason = if message.to_lowercase().contains("plan") {
@@ -104,7 +111,8 @@ impl SessionManager {
                         };
 
                         session.status = SessionStatus::WaitingForInput(wait_reason);
-                        return Some(session.clone());
+                        let changed = old_status != session.status;
+                        return Some((session.clone(), changed));
                     }
                 }
                 None
@@ -113,9 +121,11 @@ impl SessionManager {
             HookEvent::Stop { session_id } => {
                 if let Some(&our_id) = self.claude_id_map.get(&session_id) {
                     if let Some(session) = self.sessions.get_mut(&our_id) {
+                        let old_status = session.status.clone();
                         // Claude finished responding - set to waiting for input
-                        session.status = SessionStatus::WaitingForInput(WaitReason::IdlePrompt);
-                        return Some(session.clone());
+                        session.status = SessionStatus::WaitingForInput(WaitReason::Stopped);
+                        let changed = old_status != session.status;
+                        return Some((session.clone(), changed));
                     }
                 }
                 None
