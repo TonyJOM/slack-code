@@ -3,6 +3,7 @@ use daemonize::Daemonize;
 use nix::sys::signal::{kill, Signal};
 use nix::unistd::Pid;
 use slack_code_common::ipc::{DaemonCommand, DaemonEvent, DaemonStatus, HookEvent};
+use slack_code_common::session::SessionStatus;
 use slack_code_common::Config;
 use std::fs::File;
 use std::io::Read as _;
@@ -272,8 +273,8 @@ impl Daemon {
                                     }
                                 }
                             }
-                        } else if status_changed {
-                            // Only post status update, if status actually changed.
+                        } else if status_changed && !matches!(session.status, SessionStatus::Completed) {
+                            // Only post status update if status changed (skip Completed status)
                             if let Some(ref slack) = slack_service {
                                 if let Some(ref thread) = session.slack_thread {
                                     let slack = slack.read().await;
