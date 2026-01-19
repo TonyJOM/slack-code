@@ -124,11 +124,10 @@ fn format_status_message(session: &Session) -> String {
                 }
             }
         }
-        SessionStatus::Completed => {
-            format!("✅ Session completed in {}", session.duration_string())
-        }
         SessionStatus::Failed(error) => {
             format!("❌ Session failed: {}", error)
         }
+        // Completed status is filtered out in daemon.rs before calling this function,
+        SessionStatus::Completed => unreachable!("Completed status should not reach format_status_message"),
     }
 }
